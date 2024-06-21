@@ -4,6 +4,7 @@ namespace App\Libraries;
 
 use App\DTOs\DocumentDTO;
 use App\Events\ImportDocumentEvent;
+use App\Jobs\ImportDocumentJob;
 use App\Models\Document;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Artisan;
@@ -43,18 +44,6 @@ class DocumentManager extends AbstractManager
         event(new ImportDocumentEvent($documentsDTO));
 
         return true;
-    }
-
-    public function processDocuments(): bool
-    {
-        try {
-            Artisan::call('queue:work', [
-                '--once' => true,
-            ]);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
     }
 
     public function createDocument(array $dataDocument, string $categoryName): Document

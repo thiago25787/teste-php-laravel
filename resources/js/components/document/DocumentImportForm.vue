@@ -26,7 +26,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default {
-    name: "DocumentImport",
+    name: "DocumentImportForm",
     data() {
         return {
             file: null,
@@ -50,6 +50,7 @@ export default {
                         text: response.data.message,
                         icon: "success",
                     });
+                    this.notifyParent();
                 }).catch(error => {
                     if (error.response?.data?.errors) {
                         let errors = [];
@@ -70,6 +71,9 @@ export default {
                     document.getElementById('importForm').reset();
                 });
         },
+        notifyParent() {
+            this.$emit('notifyUpdate');
+        }
     },
 }
 </script>

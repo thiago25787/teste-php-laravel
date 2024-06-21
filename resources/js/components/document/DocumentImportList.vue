@@ -28,6 +28,8 @@
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+            <div class="card-footer">
                 <nav v-if="meta" class="text-center">
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
@@ -39,9 +41,6 @@
                     </ul>
                 </nav>
             </div>
-            <div class="card-footer">
-                <button type="button" @click="processDocuments()" class="btn btn-primary">Processar</button>
-            </div>
         </div>
     </div>
 </template>
@@ -52,11 +51,17 @@ import Swal from 'sweetalert2';
 
 export default {
     name: "DocumentImportList",
+    props: ['shouldUpdate'],
     data() {
         return {
             documents: [],
             meta: [],
         };
+    },
+    watch: {
+        shouldUpdate() {
+            this.listDocuments(1);
+        }
     },
     methods: {
         async listDocuments(page) {
@@ -72,27 +77,35 @@ export default {
                 });
         },
         async processDocuments() {
-            await axios.get('/api/v1/document/process')
+            await axios.get('/api/v1/document/process-queue')
                 .then(response => {
                     Swal.fire({
                         title: "Sucesso!",
                         text: response.data.message,
                         icon: "success",
                     });
-                    this.listDocuments(1);
+                    setTimeout(() => {
+                        this.listDocuments(1);
+                    }, 2000);
                 }).catch(error => {
                     this.handleErrors(error);
                 });
         },
         handleErrors(error) {
+            let errors = [];
             if (error.response?.data?.errors) {
-                let errors = [];
                 for (let key in error.response.data.errors) {
                     error.response.data.errors[key].forEach((message) => {
                         errors.push(message);
                     });
                 }
+            } else if (error.response?.data?.message) {
+                errors.push(error.response.data.message);
+            } else if (error?.message) {
+                errors.push(error.message);
+            }
 
+            if (errors.length > 0) {
                 Swal.fire({
                     title: "Erro!",
                     html: errors.join('<br/>'),

@@ -27,6 +27,11 @@ class ImportDocumentJob implements ShouldQueue
 
     }
 
+    public function viaQueue(): string
+    {
+        return 'process_import_documents';
+    }
+
     /**
      * Execute the job.
      */

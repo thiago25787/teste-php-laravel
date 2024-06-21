@@ -22,6 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::namespace('API')->group(function () {
     Route::prefix('v1')->namespace('V1')->group(function () {
         Route::apiResource('document', DocumentController::class)->only('index', 'store');
-        Route::get('document/process-queue', [DocumentController::class, 'processQueue']);
     });
 });

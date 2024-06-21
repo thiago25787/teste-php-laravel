@@ -1,7 +1,7 @@
 <template>
     <div>
-        <DocumentImportForm class="p-2" />
-        <DocumentImportList class="p-2" />
+        <DocumentImportForm class="p-2" @notifyUpdate="notifyUpdate" />
+        <DocumentImportList class="p-2" :shouldUpdate="shouldUpdate" />
     </div>
 </template>
 
@@ -12,6 +12,16 @@ import DocumentImportForm from './DocumentImportForm.vue';
 
 export default {
     name: "DocumentImport",
+    data() {
+        return {
+            shouldUpdate: false
+        };
+    },
+    methods: {
+        notifyUpdate() {
+            this.shouldUpdate = !this.shouldUpdate;
+        }
+    },
     components: {
         DocumentImportForm,
         DocumentImportList,

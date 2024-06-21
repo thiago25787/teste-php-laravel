@@ -13,7 +13,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class DocumentControllerTest extends TestCase
@@ -110,34 +109,6 @@ class DocumentControllerTest extends TestCase
                 ],
             ]);
         }
-    }
-
-    public function testProcessQueueDocuments(): void
-    {
-        Queue::fake();
-        $document = Document::factory()->make([
-            'category_id' => CategoryEnum::REMESSA->value,
-        ]);
-        $document->title .= ' - semestre';
-
-        $categoryEnum = CategoryEnum::tryFrom($document->category_id);
-
-        $documentDTO = new DocumentDTO(
-            $document->title,
-            $document->contents,
-            $categoryEnum->name(),
-            $document->financial_year,
-        );
-
-        $event = new ImportDocumentEvent([$documentDTO]);
-
-        $listener = app(ImportDocumentHandler::class);
-        $listener->handle($event);
-
-        $this->getJson('/api/document/process-queue')
-            ->assertOk();
-
-        Queue::assertPushed(ImportDocumentJob::class, 1);
     }
 
     private function getFakeJsonFile(string $fileName, int $qntDocumentsFileData = 1): UploadedFile

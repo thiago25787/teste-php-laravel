@@ -21,7 +21,7 @@ class ImportDocumentHandler
     public function handle(ImportDocumentEvent $event): void
     {
         foreach ($event->documentsDTO as $documentDTO) {
-            ImportDocumentJob::dispatch($documentDTO);
+            ImportDocumentJob::dispatch($documentDTO)->onQueue('process_import_documents');
         }
     }
 
