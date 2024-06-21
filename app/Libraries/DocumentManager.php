@@ -4,10 +4,8 @@ namespace App\Libraries;
 
 use App\DTOs\DocumentDTO;
 use App\Events\ImportDocumentEvent;
-use App\Jobs\ImportDocumentJob;
 use App\Models\Document;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\UploadedFile;
 

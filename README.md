@@ -39,7 +39,6 @@ Boa sorte!
 
 ## Para testar:
 caso no `.env` `QUEUE_CONNECTION` seja `sync` não precisa rodar nada, caso seja `database`, basta rodar o comando `php artisan queue:work --queue=process_import_documents`
-
 os testes foram divididos em 3 arquivos:
 1. um para o listener ` Tests\Feature\Listeners\ImportDocumentHandlerTest`
 2. um para o job `Tests\Feature\Jobs\ImportDocumentJobTest`
@@ -48,3 +47,4 @@ para rodar todos: `php artisan test`
 
 foi utilizado vue para visão, então será necessário executar `npm install` e em seguida `npm run dev`
 a rota de acesso é: `/document/import`
+foi usada uma base de dados postgres (apenas por questão de prefêrencia mesmo)

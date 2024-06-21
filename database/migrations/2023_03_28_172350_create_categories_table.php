@@ -11,7 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('categories')) { //adicionada verificação de existência da tabela categories para evitar erro ao rodar a migration
+        if (Schema::hasTable('categories')) { //adicionada verificação de existência da tabela categories para evitar erro ao rodar a migration
+            Schema::table('categories', function (Blueprint $table) {
+                if (!Schema::hasColumn('categories', 'name')) {
+                    $table->string('name', 20)->unique();
+                }
+                if (!Schema::hasColumn('categories', 'created_at')) {
+                    $table->timestamps();
+                }
+            });
+        } else {
             Schema::create('categories', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 20)->unique(); //unicidade adicionada
