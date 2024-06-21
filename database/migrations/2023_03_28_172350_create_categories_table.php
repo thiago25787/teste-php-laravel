@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('name', 20);
-        });
+        if (!Schema::hasTable('categories')) { //adicionada verificação de existência da tabela categories para evitar erro ao rodar a migration
+            Schema::create('categories', function (Blueprint $table) {
+                $table->id();
+                $table->string('name', 20)->unique(); //unicidade adicionada
+                $table->timestamps(); //como boa prática, coloquei os campos timestamp no fim
+            });
+        }
     }
 
     /**

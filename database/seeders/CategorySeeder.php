@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CategoryEnum;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -12,11 +13,18 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->insert([
-            'name' => 'Remessa Parcial'
-        ]);
-        DB::table('categories')->insert([
-            'name' => 'Remessa'
-        ]);
+        //criação e utilização de enum para facilitar a utilização no código
+        $categories = CategoryEnum::cases();
+
+        foreach ($categories as $category) {
+            //cria a categoria caso o id não exista ainda ou atualiza caso já exista
+            Category::updateOrCreate([
+                'id' => $category->value,
+            ], [
+                'id' => $category->value,
+                'name' => $category->name(),
+            ]);
+        }
+
     }
 }

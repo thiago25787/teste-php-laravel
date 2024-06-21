@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->bigInteger('category_id');
-            $table->string('title', 60);
-            $table->text('contents');
-
-            $table->foreign('category_id')
-                ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
-        });
+        if (!Schema::hasTable('documents')) { //adicionada verificação de existência da tabela categories para evitar erro ao rodar a migration
+            Schema::create('documents', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('category_id') //simplificação na chamada da associação
+                    ->constrained('categories')
+                    ->cascadeOnDelete();
+                $table->string('title', 60);
+                $table->integer('financial_year'); //adicionado o exercício por estar no arquivo
+                $table->text('contents');
+                $table->timestamps(); //como boa prática, coloquei os campos timestamp no fim
+            });
+        }
     }
 
     /**

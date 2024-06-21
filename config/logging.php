@@ -118,6 +118,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'import_documents' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/import/documents.log'),
+            'level' => 'error',
+        ],
     ],
 
 ];
